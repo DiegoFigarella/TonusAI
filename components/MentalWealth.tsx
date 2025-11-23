@@ -175,7 +175,7 @@ const MentalWealth: React.FC<MentalWealthProps> = React.memo(({ theme, user, onU
 
          {/* Selected Day Details */}
          {selectedDayIndex !== null && (
-             <div className="mt-6 p-4 rounded-xl bg-gray-50 dark:bg-white/5 animate-in fade-in slide-in-from-top-2">
+             <div className={`mt-6 p-4 rounded-xl ${isLight ? 'bg-gray-50' : 'bg-zinc-800'} animate-in fade-in slide-in-from-top-2`}>
                  <div className="flex justify-between items-start mb-3">
                     <div>
                         <h4 className="font-bold text-lg capitalize flex items-center gap-2">
