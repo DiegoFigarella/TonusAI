@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Emotion, UserState, Recording, EMOTION_KEYWORDS, Theme, Sensitivity, Avatar } from './types';
+import React, { useState, useEffect, useRef } from 'react';
+import { Emotion, UserState, Recording, Theme, Sensitivity, Avatar } from './types';
 import { analyzeEmotionFromText } from './services/claudeService';
 import LiquidOrb from './components/LiquidOrb';
 import Gamification from './components/Gamification';
@@ -115,17 +115,6 @@ const App: React.FC = () => {
   // Session Start Time
   const sessionStartTimeRef = useRef<number>(0);
 
-  // Check keywords
-  const checkKeywords = useCallback((text: string): Emotion | null => {
-    const lowerText = text.toLowerCase();
-    for (const [emotion, keywords] of Object.entries(EMOTION_KEYWORDS)) {
-       if (keywords && keywords.some(k => lowerText.includes(k))) {
-         return emotion as Emotion;
-       }
-    }
-    return null;
-  }, []);
-
   // Crashout Detection Logic
   useEffect(() => {
     if (recordingState === 'recording' && volume > 0.85) {
@@ -197,16 +186,8 @@ const App: React.FC = () => {
   const handleAnalysis = async (text: string, isFinal: boolean) => {
     if (!text.trim()) return;
 
-    // 1. Keyword check (Instant)
-    const keywordEmotion = checkKeywords(text);
-    if (keywordEmotion) {
-        setCurrentEmotion(keywordEmotion);
-        if (isFinal) updatePoints(keywordEmotion);
-        return; 
-    }
-
-    // 2. AI Analysis (Semantic)
-    // Send larger context for better semantic understanding
+    // Use Claude AI for semantic analysis - it understands negation and context
+    // (e.g., "I'm not good" = sad, not joy)
     const context = committedTranscriptRef.current.slice(-300);
     const detectedEmotion = await analyzeEmotionFromText(text, context);
     
