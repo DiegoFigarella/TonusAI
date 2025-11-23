@@ -1,0 +1,7 @@
+{
+  "name": "TONUS",
+  "description": "A real-time emotion visualization and mental wealth tracking application powered by Claude.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
